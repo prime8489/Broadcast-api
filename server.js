@@ -11,21 +11,31 @@ app.get("/", (req, res) => {
     res.send("✅ Broadcast API is running successfully!");
 });
 
-// ✅ Save & Broadcast Message to All Users
+// ✅ Save & Broadcast Message to All Users (With Image)
 app.post("/save-broadcast", async (req, res) => {
-    const { message, users } = req.body;
+    const { message, image, users } = req.body;
     if (!message || !users || !Array.isArray(users)) {
         return res.status(400).json({ error: "❌ Invalid data!" });
     }
 
-    // ✅ सभी यूजर्स को Telegram Bot से मैसेज भेजें
     for (let userId of users) {
         try {
-            await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                chat_id: userId,
-                text: `📢 *Broadcast Message:*\n\n${message}`,
-                parse_mode: "Markdown"
-            });
+            if (image) {
+                // ✅ अगर इमेज है, तो फोटो के साथ मैसेज भेजें
+                await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                    chat_id: userId,
+                    photo: image, // ✅ इमेज URL
+                    caption: `📢 *Broadcast Message:*\n\n${message}`,
+                    parse_mode: "Markdown"
+                });
+            } else {
+                // ✅ सिर्फ टेक्स्ट मैसेज भेजें
+                await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    chat_id: userId,
+                    text: `📢 *Broadcast Message:*\n\n${message}`,
+                    parse_mode: "Markdown"
+                });
+            }
         } catch (error) {
             console.log(`❌ Failed to send message to ${userId}`);
         }
