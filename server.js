@@ -4,7 +4,7 @@ const axios = require("axios");
 const app = express();
 app.use(express.json());
 
-const BOT_TOKEN = "7909700744:AAFW9vb74CcR4ppzlwHfFSmloWjE4SfVEUI"; // ✅ अपना बॉट टोकन डालें
+const BOT_TOKEN = "8002339671:AAFh6rt5VQ-M4jzVR6yNpSzR68hYncRgh6Q"; // ✅ अपना बॉट टोकन डालें
 
 // ✅ Default Route
 app.get("/", (req, res) => {
